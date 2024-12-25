@@ -1,3 +1,4 @@
+"use client"
 import React, {useState} from "react"
 
 interface Todo{
@@ -33,17 +34,72 @@ const Home: React.FC = ()=> {
 
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <h1 className="text-4xl font-bold text-blue-600 mb-6">My To-Do List</h1>
-      <div className="w-full max-w-2xl space-y-4">
-        {todos.map((todo, index)=>(
-          <div
-            key={index}
-            className="p-4 bg-white shadow rounded-lg border border-gray-200"
+
+      <div className="w-full max-w-2xl">
+        {/* Form */}
+        <div className="p-6 bg-white shadow rounded-lg border border-gray-200 mb-6">
+          <h2 className="text-2xl font-semibold text-gray-800 mb-4">Add a New Todo</h2>
+          
+          <form 
+            onSubmit={(e)=>{
+              e.preventDefault()
+              handleAddTodo()
+            }}
           >
-            <h2 className="text-2xl font-semibold text-gray-800">{todo.title}</h2>
-            <p className="text-gray-600">{todo.description}</p>
-          </div>
-        ))}
+            <div className="mb-4">
+              <label htmlFor="title" className="block text-gray-700 font-medium mb-2">
+                Title
+              </label>
+              <input
+                type="text"
+                id="title"
+                name="title"
+                value={newTodo.title}
+                onChange={handleChange}
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
+                placeholder="Enter todo title"
+              />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="description" className="block text-gray-700 font-medium mb-2">
+                Description
+              </label>
+              <textarea
+                id="description"
+                name="description"
+                value={newTodo.description}
+                onChange={handleChange}
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
+                rows={3}
+                placeholder="Enter todo description"
+              ></textarea>
+            </div>
+            <button
+              type="submit"
+              className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300"
+            >
+              Add Todo
+            </button>
+          </form>
+
+
+          {/* <div className="w-full max-w-2xl space-y-4">
+            {todos.map((todo, index)=>(
+              <div
+                key={index}
+                className="p-4 bg-white shadow rounded-lg border border-gray-200"
+              >
+                <h2 className="text-2xl font-semibold text-gray-800">{todo.title}</h2>
+                <p className="text-gray-600">{todo.description}</p>
+              </div>
+            ))}
+          </div> */}
+
+        </div>
+
       </div>
+
+
     </div>
 
   )
