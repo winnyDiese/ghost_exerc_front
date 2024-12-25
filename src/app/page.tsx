@@ -1,4 +1,4 @@
-import React from "react"
+import React, {useState} from "react"
 
 interface Todo{
   title: string,
@@ -7,12 +7,26 @@ interface Todo{
 
 const Home: React.FC = ()=> {
 
-  const todos: Todo[] = [
+  const [todos, setTodos] = useState<Todo[]>([
     { title:"How to present her self", description:"Begin, by your name, what you do in life, where are live, are you sigle ?"},
     { title: "Learn TypeScript", description: "Understand the basics of TypeScript with React." },
     { title: "Setup TailwindCSS", description: "Integrate TailwindCSS into your Next.js project." },
     { title: "Build a To-Do App", description: "Create a simple to-do list application." },
-  ]
+  ])
+
+  const [newTodo, setNewTodo] = useState<Todo>({title:"", description:""})
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const {name, value } = e.target
+    setNewTodo((prev) => ({...prev, [name]:value}))
+  }
+
+  const handleAddTodo = () => {
+    if(newTodo.title.trim() && newTodo.description.trim()){
+      setTodos((prev) => [...prev, newTodo])
+      setNewTodo({title:"", description:""})
+    }
+  }
 
 
   return (
@@ -32,9 +46,6 @@ const Home: React.FC = ()=> {
       </div>
     </div>
 
-    // <div className="flex items-center justify-center min-h-screen bg-gray-100">
-    //   <h1 className="text-4xl front-bold text-gray-800">Anonymous, the Ghost</h1>
-    // </div>
   )
 }
 
