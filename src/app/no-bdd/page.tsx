@@ -1,25 +1,9 @@
 "use client"
 import React, {useState} from "react"
-import {useQuery, QueryClient, QueryClientProvider} from "@tanstack/react-query"
-
 
 interface Todo{
   title: string,
   description: string
-}
-
-const API_URL = "https://jsonplaceholder.typicode.com/posts";
-
-const fetchTodos = async (): Promise<Todo[]> => {
-  const response = await fetch(API_URL)
-  const data = await response.json()
-
-    // Transform API response to matcdata.slice(0, 10).map((item: any) =>h the Todo interface
-
-    return data.slice(0, 10).map((item: any) => ({
-      title: item.title,
-      description: item.description
-    }))
 }
 
 const Home: React.FC = ()=> {
