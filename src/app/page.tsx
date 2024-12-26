@@ -28,7 +28,6 @@ const fetchTodos = async (): Promise<unknown> => {
 const Home: React.FC = ()=> {
 
 
-
   const [newTodo, setNewTodo] = useState<Todo>({title:"", description:""})
 
   // Fetch todos using react-query
