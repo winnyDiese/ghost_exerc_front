@@ -1,6 +1,6 @@
 "use client"
 import React, {useState} from "react"
-import {useQuery, QueryClient, QueryClientProvider} from "@tanstack/react-query"
+import {useQuery} from "@tanstack/react-query"
 
 
 interface Todo{
@@ -11,7 +11,7 @@ interface Todo{
 const API_URL = "https://jsonplaceholder.typicode.com/posts";
 
 // Fectch data, react-query
-const fetchTodos = async (): Promise<Todo[]> => {
+const fetchTodos = async (): Promise<unknown> => {
   const response = await fetch(API_URL)
   const data = await response.json()
 
@@ -32,7 +32,10 @@ const Home: React.FC = ()=> {
   const [newTodo, setNewTodo] = useState<Todo>({title:"", description:""})
 
   // Fetch todos using react-query
-  const {data: todos = [], isLoading, isError} = useQuery(["todos"], fetchTodos)
+  const {data: todos = [], isLoading, isError} = useQuery<unknown>({
+    queryKey: ["todos"],
+    queryFn: fetchTodos
+  })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const {name, value } = e.target
