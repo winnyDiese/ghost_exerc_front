@@ -10,6 +10,7 @@ interface Todo{
 
 const API_URL = "https://jsonplaceholder.typicode.com/posts";
 
+// Fectch data, react-query
 const fetchTodos = async (): Promise<Todo[]> => {
   const response = await fetch(API_URL)
   const data = await response.json()
@@ -22,16 +23,16 @@ const fetchTodos = async (): Promise<Todo[]> => {
     }))
 }
 
+
+// Component
 const Home: React.FC = ()=> {
 
-  const [todos, setTodos] = useState<Todo[]>([
-    { title:"How to present her self", description:"Begin, by your name, what you do in life, where are live, are you sigle ?"},
-    { title: "Learn TypeScript", description: "Understand the basics of TypeScript with React." },
-    { title: "Setup TailwindCSS", description: "Integrate TailwindCSS into your Next.js project." },
-    { title: "Build a To-Do App", description: "Create a simple to-do list application." },
-  ])
+
 
   const [newTodo, setNewTodo] = useState<Todo>({title:"", description:""})
+
+  // Fetch todos using react-query
+  const {data: todos = [], isLoading, isError} = useQuery(["todos"], fetchTodos)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const {name, value } = e.target
@@ -45,6 +46,14 @@ const Home: React.FC = ()=> {
     }
   }
 
+
+  if (isLoading) {
+    return <div className="text-center text-blue-600">Loading...</div>;
+  }
+
+  if (isError) {
+    return <div className="text-center text-red-600">Error fetching todos!</div>;
+  }
 
   return (
 
