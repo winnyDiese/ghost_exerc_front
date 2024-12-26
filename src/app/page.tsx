@@ -8,19 +8,40 @@ interface Todo{
   description: string
 }
 
-const API_URL = "https://jsonplaceholder.typicode.com/posts";
+interface User{
+  name: string,
+  email: string,
+  password: string
+}
+
+// const API_URL = "https://jsonplaceholder.typicode.com/posts";
+const API_URL = "http://localhost:3001/api/users";
 
 // Fectch data, react-query
-const fetchTodos = async (): Promise<unknown> => {
+const fetchTodos = async (): Promise<User> => {
   const response = await fetch(API_URL)
-  const data = await response.json()
+  
+  if (!response.ok) {
+    throw new Error("Failed to fetch users")
+  }
+  return response.json()
 
-    // Transform API response to matcdata.slice(0, 10).map((item: any) =>h the Todo interface
+}
 
-    return data.slice(0, 10).map((item: any) => ({
-      title: item.title,
-      description: item.description
-    }))
+
+const addUser = async (newUser: User): Promise<User> => {
+  const response = await fetch(API_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(newUSer)
+  })
+
+  if(!response.ok) throw new Error("Failed to add user")
+
+  return response.json()
+
 }
 
 
@@ -29,12 +50,14 @@ const Home: React.FC = ()=> {
 
 
   const [newTodo, setNewTodo] = useState<Todo>({title:"", description:""})
+  // const [newUser, setNewUser] = useState<User>({ name:"", password:"", email:"" })
 
   // Fetch todos using react-query
-  const {data: todos = [], isLoading, isError} = useQuery<unknown>({
-    queryKey: ["todos"],
+  const {data: users = [], isLoading, isError} = useQuery<User>({
+    queryKey: ["users"],
     queryFn: fetchTodos
   })
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const {name, value } = e.target
@@ -114,10 +137,10 @@ const Home: React.FC = ()=> {
           
         {/* List */}
         <div className="flex-1 space-y-4 pl-2 pb-10">
-          {todos.map((todo, index) => (
+          {users.map((user: User, index: number) => (
             <div key={index} className="p-4 bg-white shadow rounded-lg border border-gray-200">
-              <h2 className="text-xl font-semibold text-gray-800">{todo.title}</h2>
-              <p className="text-gray-600 text-sm">{todo.description}</p>
+              <h2 className="text-xl font-semibold text-gray-800">{user.name}</h2>
+              <p className="text-gray-600 text-sm">{user.email}</p>
             </div>
           ))}
         </div>
