@@ -1,6 +1,6 @@
 "use client"
 import React, {useState} from "react"
-import {useMutation, useQuery} from "@tanstack/react-query"
+import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query"
 
 
 interface Todo{
@@ -48,6 +48,7 @@ const addUser = async (newUser: User): Promise<User> => {
 // Component
 const Home: React.FC = ()=> {
 
+  const queryClient = useQueryClient()
   const [newUser, setNewUser] = useState<User>({ name:"", password:"", email:"" })
 
   // Fetch todos using react-query
