@@ -49,25 +49,35 @@ const addUser = async (newUser: User): Promise<User> => {
 const Home: React.FC = ()=> {
 
 
-  const [newTodo, setNewTodo] = useState<Todo>({title:"", description:""})
-  // const [newUser, setNewUser] = useState<User>({ name:"", password:"", email:"" })
+  // const [newTodo, setNewTodo] = useState<Todo>({title:"", description:""})
+  const [newUser, setNewUser] = useState<User>({ name:"", password:"", email:"" })
 
   // Fetch todos using react-query
-  const {data: users = [], isLoading, isError} = useQuery<User>({
+  const {data: users = [], isLoading, isError} = useQuery<User[]>({
     queryKey: ["users"],
     queryFn: fetchTodos
   })
 
 
+  // Add user mutation
+  const mutation = useMutation(addUser, {
+    onSuccess: () => {
+      // Refetch users after adding a new user
+      queryClient.invalidateQueries(['users'])
+    }
+  })
+
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const {name, value } = e.target
-    setNewTodo((prev) => ({...prev, [name]:value}))
+    setNewUser((prev) => ({...prev, [name]:value}))
   }
 
   const handleAddTodo = () => {
-    if(newTodo.title.trim() && newTodo.description.trim()){
-      setTodos((prev) => [...prev, newTodo])
-      setNewTodo({title:"", description:""})
+    if (newUser.name.trim() && newUser.email.trim() && newUser.password.trim()) {
+
+      mutation.mutate(newUser)
+      setNewUser({ name: "", password: "", email: "" })
     }
   }
 
