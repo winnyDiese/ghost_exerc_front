@@ -1,6 +1,6 @@
 "use client"
 import React, {useState} from "react"
-import {useQuery} from "@tanstack/react-query"
+import {useMutation, useQuery} from "@tanstack/react-query"
 
 
 interface Todo{
@@ -18,7 +18,7 @@ interface User{
 const API_URL = "http://localhost:3001/api/users";
 
 // Fectch data, react-query
-const fetchTodos = async (): Promise<User> => {
+const fetchUser = async (): Promise<User> => {
   const response = await fetch(API_URL)
   
   if (!response.ok) {
@@ -35,7 +35,7 @@ const addUser = async (newUser: User): Promise<User> => {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(newUSer)
+    body: JSON.stringify(newUser)
   })
 
   if(!response.ok) throw new Error("Failed to add user")
@@ -48,19 +48,17 @@ const addUser = async (newUser: User): Promise<User> => {
 // Component
 const Home: React.FC = ()=> {
 
-
-  // const [newTodo, setNewTodo] = useState<Todo>({title:"", description:""})
   const [newUser, setNewUser] = useState<User>({ name:"", password:"", email:"" })
 
   // Fetch todos using react-query
   const {data: users = [], isLoading, isError} = useQuery<User[]>({
     queryKey: ["users"],
-    queryFn: fetchTodos
+    queryFn: fetchUser
   })
 
 
   // Add user mutation
-  const mutation = useMutation(addUser, {
+  const mutation = useMutation<User, Error, User>(addUser, {
     onSuccess: () => {
       // Refetch users after adding a new user
       queryClient.invalidateQueries(['users'])
@@ -73,9 +71,8 @@ const Home: React.FC = ()=> {
     setNewUser((prev) => ({...prev, [name]:value}))
   }
 
-  const handleAddTodo = () => {
+  const handleAddUser= () => {
     if (newUser.name.trim() && newUser.email.trim() && newUser.password.trim()) {
-
       mutation.mutate(newUser)
       setNewUser({ name: "", password: "", email: "" })
     }
@@ -104,7 +101,7 @@ const Home: React.FC = ()=> {
           <form 
             onSubmit={(e)=>{
               e.preventDefault()
-              handleAddTodo()
+              handleAddUser()
             }}
           >
             <div className="mb-4">
@@ -113,33 +110,50 @@ const Home: React.FC = ()=> {
               </label>
               <input
                 type="text"
-                id="title"
-                name="title"
-                value={newTodo.title}
+                id="name"
+                name="name"
+                value={newUser.name}
                 onChange={handleChange}
                 className="w-full text-black px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
-                placeholder="Enter todo title"
+                placeholder="Enter user name"
               />
             </div>
+
             <div className="mb-4">
-              <label htmlFor="description" className="block text-gray-700 font-medium mb-2">
-                Description
+              <label htmlFor="email" className="block text-gray-700 font-medium mb-2">
+                Email
               </label>
-              <textarea
-                id="description"
-                name="description"
-                value={newTodo.description}
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={newUser.email}
                 onChange={handleChange}
                 className="w-full text-black px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
-                rows={3}
-                placeholder="Enter todo description"
-              ></textarea>
+                placeholder="Enter user email"
+              />
             </div>
+
+            <div className="mb-4">
+              <label htmlFor="password" className="block text-gray-700 font-medium mb-2">
+                Password
+              </label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                value={newUser.password}
+                onChange={handleChange}
+                className="w-full text-black px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
+                placeholder="Enter user password"
+              />
+            </div>
+
             <button
               type="submit"
               className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300"
             >
-              Add Todo
+              Add User
             </button>
           </form>
 
