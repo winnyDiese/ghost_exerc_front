@@ -3,29 +3,20 @@ import React, {useState} from "react"
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query"
 
 
-interface Todo{
-  title: string,
-  description: string
-}
-
 interface User{
   name: string,
   email: string,
   password: string
 }
 
-// const API_URL = "https://jsonplaceholder.typicode.com/posts";
 const API_URL = "http://localhost:3001/api/users";
 
 // Fectch data, react-query
 const fetchUser = async (): Promise<User> => {
   const response = await fetch(API_URL)
+  if (!response.ok) throw new Error("Failed to fetch users")
   
-  if (!response.ok) {
-    throw new Error("Failed to fetch users")
-  }
   return response.json()
-
 }
 
 
@@ -51,7 +42,7 @@ const Home: React.FC = ()=> {
   const queryClient = useQueryClient()
   const [newUser, setNewUser] = useState<User>({ name:"", password:"", email:"" })
 
-  // Fetch todos using react-query
+  // Fetch users using react-query
   const {data: users = [], isLoading, isError} = useQuery<User[]>({
     queryKey: ["users"],
     queryFn: fetchUser
@@ -59,7 +50,7 @@ const Home: React.FC = ()=> {
 
 
   // Add user mutation
-  const mutation = useMutation<User, Error, User>(addUser, {
+  const mutation = useMutation<User, Error, User, unknown>(addUser, {
     onSuccess: () => {
       // Refetch users after adding a new user
       queryClient.invalidateQueries(['users'])
