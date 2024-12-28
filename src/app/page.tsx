@@ -50,7 +50,7 @@ const Home: React.FC = ()=> {
 
 
   // Add user mutation
-  const mutation = useMutation<User, Error, User, unknown>(addUser, {
+  const mutation = useMutation(addUser, {
     onSuccess: () => {
       // Refetch users after adding a new user
       queryClient.invalidateQueries(['users'])

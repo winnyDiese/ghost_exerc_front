@@ -22,6 +22,8 @@ interface ReactQueryProviderProps {
 
 
 export const ReactQueryProvider: React.FC<ReactQueryProviderProps> = ({children}) => {
+    console.log(queryClient); // Debugging queryClient
+
     return (
         <QueryClientProvider client={queryClient} >
             {children}
