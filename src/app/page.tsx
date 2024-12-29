@@ -11,6 +11,8 @@ interface User{
 
 const API_URL = "http://localhost:3001/api/users";
 
+
+
 // Fectch data, react-query
 const fetchUser = async (): Promise<User> => {
   const response = await fetch(API_URL)
@@ -50,12 +52,20 @@ const Home: React.FC = ()=> {
 
 
   // Add user mutation
-  const mutation = useMutation(addUser, {
-    onSuccess: () => {
-      // Refetch users after adding a new user
-      queryClient.invalidateQueries(['users'])
-    }
+  // const mutation = useMutation(addUser, {
+  //   onSuccess: () => {
+  //     // Refetch users after adding a new user
+  //     queryClient.invalidateQueries(['users'])
+  //   }
+  // })
+
+  // const {mutate, mutateAsync} = useMutation({
+  const {mutateAsync: addUserMutation} = useMutation({
+    mutationFn: addUser,
+
   })
+
+
 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -63,10 +73,15 @@ const Home: React.FC = ()=> {
     setNewUser((prev) => ({...prev, [name]:value}))
   }
 
-  const handleAddUser= () => {
+  const handleAddUser= async () => {
     if (newUser.name.trim() && newUser.email.trim() && newUser.password.trim()) {
-      mutation.mutate(newUser)
-      setNewUser({ name: "", password: "", email: "" })
+      try {
+        
+        await addUserMutation(newUser)
+        setNewUser({ name: "", password: "", email: "" })
+      } catch (e) {
+        console.error(e)
+      }
     }
   }
 
