@@ -24,7 +24,6 @@ const addUser = async (newUser: User): Promise<User> => {
   if(!response.ok) throw new Error("Failed to add user")
 
   return response.json()
-
 }
 
 
@@ -53,7 +52,7 @@ const AddUserForm: React.FC = () => {
     setNewUser((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleAddUser = () => {
+  const handleAddUser = async () => {
     if (newUser.name.trim() && newUser.email.trim() && newUser.password.trim()) {
       // // Assurez-vous que `mutation` est défini et correctement typé dans votre projet
       // addUserMutate(newUser);
