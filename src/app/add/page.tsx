@@ -1,6 +1,6 @@
 "use client"
 
-import { Mutation, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
 
 // Définir le type pour `newUser`
