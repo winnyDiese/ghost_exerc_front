@@ -43,8 +43,8 @@ const AddUserForm: React.FC = () => {
     mutationFn: addUser,
     onSuccess: () => {
       // Refetch users after adding a new user
-      queryClient.invalidateQueries(['users'])
-}
+      queryClient.invalidateQueries({queryKey: ['users']})
+    }
   })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -137,7 +137,7 @@ const AddUserForm: React.FC = () => {
         </div>
     </div>
   )
-  
+
 };
 
 export default AddUserForm;
