@@ -107,7 +107,7 @@ const Home: React.FC = ()=> {
         {/* Form */}
         <div className="flex-1 p-6 bg-white shadow rounded-lg border border-gray-200 mb-6">
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">Add a New Todo</h2>
-            
+
           <form 
             onSubmit={(e)=>{
               e.preventDefault()
