@@ -64,7 +64,7 @@ const Home: React.FC = ()=> {
     mutationFn: addUser,
     onSuccess: () => {
           // Refetch users after adding a new user
-          queryClient.invalidateQueries(['users'])
+          queryClient.invalidateQueries({queryKey: ['users']})
     }
   })
 
