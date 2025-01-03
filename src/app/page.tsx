@@ -45,7 +45,7 @@ const Home: React.FC = ()=> {
   const [newUser, setNewUser] = useState<User>({ name:"", password:"", email:"" })
 
   // Fetch users using react-query
-  const {data: users = [], isLoading, isError} = useQuery<User[]>({
+  const {data: users = [], isLoading, isError} = useQuery<User[], Error>({
     queryKey: ["users"],
     queryFn: fetchUser
   })
