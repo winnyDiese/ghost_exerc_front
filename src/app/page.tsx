@@ -60,7 +60,7 @@ const Home: React.FC = ()=> {
   // })
 
   // const {mutate, mutateAsync} = useMutation({
-  const {mutateAsync: addUserMutation} = useMutation({
+  const {mutateAsync: addUserMutation} = useMutation<User, Error, User>({
     mutationFn: addUser,
     onSuccess: () => {
           // Refetch users after adding a new user
